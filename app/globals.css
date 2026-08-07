@@ -1354,7 +1354,7 @@ summary:focus-visible {
 }
 
 .home-page .hero h1 {
-  max-width: 780px;
+  max-width: 1200px;
   color: #1c211f;
   font-size: clamp(48px, 6vw, 76px);
   font-weight: 500;
