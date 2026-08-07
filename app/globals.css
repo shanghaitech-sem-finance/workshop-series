@@ -1436,10 +1436,6 @@ summary:focus-visible {
   padding: 22px 26px;
 }
 
-.home-page .event-facts div:first-child {
-  padding-left: 0;
-}
-
 .home-page .event-facts div + div {
   border-left-color: #d9ddda;
 }
