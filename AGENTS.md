@@ -85,7 +85,7 @@ A push to `main` triggers `.github/workflows/deploy-pages.yml`. The workflow set
 
 After deployment, the workflow runs `scripts/check-live-site.mjs` to verify the homepage, linked annual pages, and all emitted CSS and JavaScript URLs. Run `npm run check:live` manually when diagnosing a live-site report. If a browser shows a previous version immediately after deployment, use a hard refresh before diagnosing a regression.
 
-The live check also verifies canonical URLs, explicit page-level indexing permission, and the production sitemap. Google Search Console must use the URL-prefix property `https://shanghaitech-sem-finance.github.io/workshop-series/`; a Domain property cannot be verified because the organization does not control `github.io` DNS. Keep Google verification files in `public/`. Do not add `public/robots.txt`: robots rules apply only at the origin root, not the `/workshop-series/` project path, and the absent root file does not block crawling.
+The live check also verifies canonical URLs, explicit page-level indexing permission, the production sitemap, and `public/google51880260da1cd2eb.html`. Google Search Console must use the URL-prefix property `https://shanghaitech-sem-finance.github.io/workshop-series/`; a Domain property cannot be verified because the organization does not control `github.io` DNS. Keep the Google verification file unchanged. Do not add `public/robots.txt`: robots rules apply only at the origin root, not the `/workshop-series/` project path, and the absent root file does not block crawling.
 
 ## Known pitfalls and their established fixes
 

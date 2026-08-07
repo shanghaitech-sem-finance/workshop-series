@@ -65,6 +65,6 @@ npm run check:live
 - `public/sitemap.xml` lists the homepage and every public workshop program page. Update it whenever a new annual page is published.
 - The sitemap is published at https://shanghaitech-sem-finance.github.io/workshop-series/sitemap.xml.
 - Google Search Console should use the URL-prefix property `https://shanghaitech-sem-finance.github.io/workshop-series/` because the site is hosted below the shared `github.io` domain.
-- Keep any Google ownership-verification file supplied for this property in `public/`; removing it can invalidate verification.
+- Keep `public/google51880260da1cd2eb.html`, the Google ownership-verification file for this property; removing or changing it can invalidate verification.
 
 The GitHub Pages project is hosted below `/workshop-series/`. A standard `robots.txt` applies only at the domain root, so a file at `/workshop-series/robots.txt` would not control crawling. Indexing permission is declared in page metadata instead.

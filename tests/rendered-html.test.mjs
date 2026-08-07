@@ -127,9 +127,10 @@ test("exports each historical workshop as a standalone HTML page", async () => {
 });
 
 test("includes GitHub Pages deployment assets", async () => {
-  const [gitignore, sitemap] = await Promise.all([
+  const [gitignore, sitemap, googleVerification] = await Promise.all([
     readFile(new URL("../.gitignore", import.meta.url), "utf8"),
     readOutput("sitemap.xml"),
+    readOutput("google51880260da1cd2eb.html"),
   ]);
 
   await Promise.all([
@@ -149,6 +150,10 @@ test("includes GitHub Pages deployment assets", async () => {
     assert.match(sitemap, new RegExp(`<loc>${productionUrl(path)}</loc>`));
   }
   assert.doesNotMatch(sitemap, /localhost/);
+  assert.equal(
+    googleVerification.trim(),
+    "google-site-verification: google51880260da1cd2eb.html",
+  );
 });
 
 test("preserves approved typography and homepage spacing", async () => {

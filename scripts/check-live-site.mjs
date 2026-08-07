@@ -88,6 +88,16 @@ for (const documentUrl of documents.keys()) {
   }
 }
 
+const verificationUrl = new URL("google51880260da1cd2eb.html", siteUrl);
+const verificationResponse = await fetchWithRetry(verificationUrl);
+const verificationText = (await verificationResponse.text()).trim();
+if (
+  verificationText !==
+  "google-site-verification: google51880260da1cd2eb.html"
+) {
+  throw new Error(`${verificationUrl} returned unexpected verification content.`);
+}
+
 const assetUrls = new Set();
 for (const html of documents.values()) {
   for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
@@ -119,5 +129,5 @@ for (const assetUrl of assetUrls) {
 }
 
 console.log(
-  `Live site check passed: ${documents.size} HTML pages, sitemap, and ${assetUrls.size} static assets${expectedVersion ? ` for ${expectedVersion.slice(0, 12)}` : ""}.`,
+  `Live site check passed: ${documents.size} HTML pages, sitemap, Google verification, and ${assetUrls.size} static assets${expectedVersion ? ` for ${expectedVersion.slice(0, 12)}` : ""}.`,
 );
