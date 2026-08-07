@@ -101,10 +101,46 @@ test("exports each historical workshop as a standalone HTML page", async () => {
 });
 
 test("includes GitHub Pages deployment assets", async () => {
+  const gitignore = await readFile(new URL("../.gitignore", import.meta.url), "utf8");
+
   await Promise.all([
     access(new URL("og.png", outputRoot)),
     access(new URL("404.html", outputRoot)),
     access(new URL("../.github/workflows/deploy-pages.yml", import.meta.url)),
     access(new URL("../public/.nojekyll", import.meta.url)),
   ]);
+
+  assert.match(gitignore, /^\/REQUIREMENTS\.md$/m);
+  assert.match(
+    gitignore,
+    /^\/6\. ShanghaiTech_SEM_Finance_Workshop_Programs\.pdf$/m,
+  );
+});
+
+test("preserves approved typography and homepage spacing", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  const titleRule = css.match(/\.home-page \.hero h1\s*\{([^}]*)\}/)?.[1] ?? "";
+  assert.match(titleRule, /max-width:\s*1200px/);
+
+  const factsStart = css.indexOf(".home-page .event-facts {");
+  const mobileStart = css.indexOf("@media (max-width: 900px)", factsStart);
+  const desktopFacts = css.slice(factsStart, mobileStart);
+  assert.match(
+    desktopFacts,
+    /\.home-page \.event-facts div\s*\{[^}]*padding:\s*22px 26px/s,
+  );
+  assert.doesNotMatch(
+    desktopFacts,
+    /\.home-page \.event-facts div:first-child\s*\{/,
+  );
+
+  const fontSizesFor = (selector) => {
+    const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return [...css.matchAll(new RegExp(`${escapedSelector}\\s*\\{([^}]*)\\}`, "g"))]
+      .map((match) => match[1].match(/font-size:\s*([^;]+);/)?.[1])
+      .filter(Boolean);
+  };
+
+  assert.deepEqual(fontSizesFor(".discussant strong"), fontSizesFor(".schedule-row h3"));
 });

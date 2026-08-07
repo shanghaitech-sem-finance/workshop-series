@@ -80,9 +80,17 @@ npm test
 npm run lint
 ```
 
-A push to `main` triggers `.github/workflows/deploy-pages.yml`. The workflow sets the GitHub Pages base path and copies the nested `_next` assets to the artifact root. Do not remove the `Place static assets at the Pages artifact root` step: without it, HTML loads but CSS and JavaScript return 404.
+A push to `main` triggers `.github/workflows/deploy-pages.yml`. The workflow sets the GitHub Pages base path and runs `scripts/prepare-pages-assets.mjs`, which copies nested `_next` assets to the artifact root and verifies every CSS and JavaScript reference. Do not remove the `Place static assets at the Pages artifact root` step: without it, HTML loads but CSS and JavaScript return 404.
 
-After deployment, verify the homepage, all annual pages, and at least one emitted CSS and JavaScript URL return HTTP 200. If a browser shows a previous version immediately after deployment, use a hard refresh before diagnosing a regression.
+After deployment, the workflow runs `scripts/check-live-site.mjs` to verify the homepage, linked annual pages, and all emitted CSS and JavaScript URLs. Run `npm run check:live` manually when diagnosing a live-site report. If a browser shows a previous version immediately after deployment, use a hard refresh before diagnosing a regression.
+
+## Known pitfalls and their established fixes
+
+- **Live page has content but no styling:** this is a GitHub Pages base-path artifact problem, not a CSS-design problem. Run `npm run prepare:pages` against a base-path build or inspect the `Place static assets at the Pages artifact root` workflow step. `npm test` includes a base-path build and referenced-asset regression check.
+- **Embedded browser says localhost refused the connection:** run `npm run dev:preview` instead of editing `vite.config.ts`. It sets the preview-only host through `WORKSHOP_PREVIEW_HOST`; stop the long-running process after review.
+- **Windows prints `UV_HANDLE_CLOSING` after an otherwise complete vinext build:** `scripts/test.mjs` retries a failed Windows build once after a short cleanup delay. Do not manually loop through unrelated fixes; if the scripted retry also fails, investigate the persistent build error.
+- **A successful deployment still shows an old layout:** first hard-refresh the browser. Then run `npm run check:live` to distinguish browser/CDN cache from missing live assets.
+- **GitHub Pages is not enabled in a new repository:** set Repository Settings > Pages > Source to GitHub Actions once, then rerun the workflow.
 
 ## Repository hygiene
 

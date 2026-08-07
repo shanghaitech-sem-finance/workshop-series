@@ -18,6 +18,14 @@ npm run dev
 
 The local website is available at `http://localhost:3000`.
 
+If an embedded browser cannot reach the default loopback listener, use:
+
+```bash
+npm run dev:preview
+```
+
+This preview-only command listens on `0.0.0.0`; stop it when the review is complete.
+
 ## Content structure
 
 - Homepage: `app/page.tsx`
@@ -42,3 +50,9 @@ Search for `zhangyp3@shanghaitech.edu.cn` in `app/components/MarketingHome.tsx` 
 The workflow in `.github/workflows/deploy-pages.yml` builds and publishes the static site automatically whenever the `main` branch is updated.
 
 In the GitHub repository, open **Settings > Pages** and set **Source** to **GitHub Actions**. The workflow automatically handles the project-site path `/workshop-series/`.
+
+The workflow also verifies every emitted CSS and JavaScript reference before upload and checks the live HTML pages and assets after deployment. The same live check can be run manually with:
+
+```bash
+npm run check:live
+```

@@ -41,14 +41,9 @@ jobs:
         run: npm run build
 
       - name: Place static assets at the Pages artifact root
-        shell: bash
-        run: |
-          base_path="${{ steps.pages.outputs.base_path }}"
-          nested_assets="dist/client${base_path}"
-          if [[ -n "$base_path" && -d "$nested_assets" ]]; then
-            cp -R "$nested_assets"/. dist/client/
-          fi
-          test -d dist/client/_next/static
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: npm run prepare:pages
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
@@ -59,9 +54,31 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  verify:
+    name: Verify live website
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Check live pages and assets
+        env:
+          WORKSHOP_SITE_URL: ${{ needs.deploy.outputs.page_url }}
+          WORKSHOP_EXPECTED_SHA: ${{ github.sha }}
+        run: npm run check:live
