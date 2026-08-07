@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingHome } from "./components/MarketingHome";
+import { absoluteSiteUrl } from "./lib/site-path";
 
 export const metadata: Metadata = {
   description:
@@ -9,5 +10,10 @@ export const metadata: Metadata = {
 export const dynamic = "force-static";
 
 export default function Home() {
-  return <MarketingHome />;
+  return (
+    <>
+      <link rel="canonical" href={absoluteSiteUrl("/")} />
+      <MarketingHome />
+    </>
+  );
 }

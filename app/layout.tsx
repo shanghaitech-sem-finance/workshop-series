@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
+import { absoluteSiteUrl } from "./lib/site-path";
 import "./globals.css";
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const siteOrigin = new URL(siteUrl).origin;
-const socialImageUrl = `${siteOrigin}${basePath}/og.png`;
+const homepageUrl = absoluteSiteUrl("/");
+const socialImageUrl = absoluteSiteUrl("/og.png");
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(homepageUrl),
   title: {
     default: "ShanghaiTech SEM Finance Workshop",
     template: "%s | ShanghaiTech SEM Finance Workshop",
@@ -22,11 +21,20 @@ export const metadata: Metadata = {
     "academic conference",
   ],
   authors: [{ name: "ShanghaiTech School of Entrepreneurship and Management" }],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     alternateLocale: "zh_CN",
     siteName: "ShanghaiTech SEM Finance Workshop",
+    url: homepageUrl,
     title: "ShanghaiTech SEM Finance Workshop",
     description:
       "2026 workshop information and previous workshop programs.",

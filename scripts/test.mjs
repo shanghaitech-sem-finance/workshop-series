@@ -62,6 +62,12 @@ await runRequired("GitHub Pages static build", process.execPath, [vinextCli, "bu
   retries: buildRetries,
 });
 await runRequired(
+  "GitHub Pages rendered HTML regression tests",
+  process.execPath,
+  ["--test", renderedHtmlTest],
+  { env: pagesEnvironment },
+);
+await runRequired(
   "GitHub Pages asset verification",
   process.execPath,
   [preparePagesAssets],

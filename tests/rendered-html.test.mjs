@@ -3,6 +3,18 @@ import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 const outputRoot = new URL("../dist/client/", import.meta.url);
+const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "");
+const siteOrigin = new URL(
+  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+).origin;
+const canonicalUrl = (path) => {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${siteOrigin}${basePath}${normalizedPath}`;
+};
+const productionUrl = (path) => {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `https://shanghaitech-sem-finance.github.io/workshop-series${normalizedPath}`;
+};
 
 async function readOutput(path) {
   return readFile(new URL(path, outputRoot), "utf8");
@@ -15,6 +27,14 @@ test("exports the complete bilingual marketing homepage", async () => {
   ]);
 
   assert.match(html, /<title>ShanghaiTech SEM Finance Workshop<\/title>/);
+  assert.match(
+    html,
+    new RegExp(
+      `<link rel="canonical" href="${canonicalUrl("/").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`,
+    ),
+  );
+  assert.match(html, /<meta name="robots" content="index, follow"\/>/);
+  assert.match(html, /<meta name="googlebot" content="index, follow"\/>/);
   assert.match(html, /Saturday, October 10, 2026/);
   assert.match(
     html,
@@ -55,7 +75,7 @@ test("exports the complete bilingual marketing homepage", async () => {
   assert.match(normalizedVisibleBody, /2023 Program/);
 
   for (const year of ["2023", "2024", "2025"]) {
-    assert.match(html, new RegExp(`href="/workshops/${year}"`));
+    assert.match(html, new RegExp(`href="${basePath}/workshops/${year}"`));
   }
 
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
@@ -80,6 +100,12 @@ test("exports each historical workshop as a standalone HTML page", async () => {
   for (const [year, snippets] of Object.entries(expectedContent)) {
     const html = await readOutput(`workshops/${year}.html`);
     assert.match(html, new RegExp(`<title>${year} Program`));
+    assert.match(
+      html,
+      new RegExp(
+        `<link rel="canonical" href="${canonicalUrl(`/workshops/${year}`).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`,
+      ),
+    );
     assert.match(html, /class="schedule-list"/);
     assert.match(html, /中文/);
     assert.match(html, /<dt>Date<\/dt>/);
@@ -101,7 +127,10 @@ test("exports each historical workshop as a standalone HTML page", async () => {
 });
 
 test("includes GitHub Pages deployment assets", async () => {
-  const gitignore = await readFile(new URL("../.gitignore", import.meta.url), "utf8");
+  const [gitignore, sitemap] = await Promise.all([
+    readFile(new URL("../.gitignore", import.meta.url), "utf8"),
+    readOutput("sitemap.xml"),
+  ]);
 
   await Promise.all([
     access(new URL("og.png", outputRoot)),
@@ -115,6 +144,11 @@ test("includes GitHub Pages deployment assets", async () => {
     gitignore,
     /^\/6\. ShanghaiTech_SEM_Finance_Workshop_Programs\.pdf$/m,
   );
+
+  for (const path of ["/", "/workshops/2023", "/workshops/2024", "/workshops/2025"]) {
+    assert.match(sitemap, new RegExp(`<loc>${productionUrl(path)}</loc>`));
+  }
+  assert.doesNotMatch(sitemap, /localhost/);
 });
 
 test("preserves approved typography and homepage spacing", async () => {

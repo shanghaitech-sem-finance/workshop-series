@@ -2,6 +2,8 @@
 
 Official marketing and program archive website for the ShanghaiTech SEM Finance Workshop.
 
+Live site: https://shanghaitech-sem-finance.github.io/workshop-series/
+
 ## Current edition
 
 - Date: October 10, 2026
@@ -56,3 +58,13 @@ The workflow also verifies every emitted CSS and JavaScript reference before upl
 ```bash
 npm run check:live
 ```
+
+## Search indexing
+
+- Canonical URLs are generated from `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_BASE_PATH`.
+- `public/sitemap.xml` lists the homepage and every public workshop program page. Update it whenever a new annual page is published.
+- The sitemap is published at https://shanghaitech-sem-finance.github.io/workshop-series/sitemap.xml.
+- Google Search Console should use the URL-prefix property `https://shanghaitech-sem-finance.github.io/workshop-series/` because the site is hosted below the shared `github.io` domain.
+- Keep any Google ownership-verification file supplied for this property in `public/`; removing it can invalidate verification.
+
+The GitHub Pages project is hosted below `/workshop-series/`. A standard `robots.txt` applies only at the domain root, so a file at `/workshop-series/robots.txt` would not control crawling. Indexing permission is declared in page metadata instead.

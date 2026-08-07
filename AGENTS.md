@@ -50,6 +50,7 @@ Replace the temporary contact email when the event-specific address is provided.
 - Global styles: `app/globals.css`
 - Site metadata and social preview: `app/layout.tsx` and `public/og.png`
 - Base-path helper: `app/lib/site-path.ts`
+- Search sitemap: `public/sitemap.xml`
 - Deployment workflow: `.github/workflows/deploy-pages.yml`
 
 `workshopYears` in `app/data/workshops.ts` controls the previous-workshop list. A newly published current-edition page does not automatically need to be added to that list until it becomes a previous edition.
@@ -69,7 +70,7 @@ Search for `zhangyp3@shanghaitech.edu.cn`, update both language entries in `Mark
 
 ### Add a future edition
 
-Update the bilingual homepage copy, footer year, metadata, social-preview text/image if needed, workshop data, and the previous-edition list. Preserve the established page structure and styling unless a redesign is explicitly requested.
+Update the bilingual homepage copy, footer year, metadata, social-preview text/image if needed, workshop data, the previous-edition list, and `public/sitemap.xml`. Preserve the established page structure and styling unless a redesign is explicitly requested.
 
 ## Publishing and verification
 
@@ -84,11 +85,15 @@ A push to `main` triggers `.github/workflows/deploy-pages.yml`. The workflow set
 
 After deployment, the workflow runs `scripts/check-live-site.mjs` to verify the homepage, linked annual pages, and all emitted CSS and JavaScript URLs. Run `npm run check:live` manually when diagnosing a live-site report. If a browser shows a previous version immediately after deployment, use a hard refresh before diagnosing a regression.
 
+The live check also verifies canonical URLs, explicit page-level indexing permission, and the production sitemap. Google Search Console must use the URL-prefix property `https://shanghaitech-sem-finance.github.io/workshop-series/`; a Domain property cannot be verified because the organization does not control `github.io` DNS. Keep Google verification files in `public/`. Do not add `public/robots.txt`: robots rules apply only at the origin root, not the `/workshop-series/` project path, and the absent root file does not block crawling.
+
 ## Known pitfalls and their established fixes
 
 - **Live page has content but no styling:** this is a GitHub Pages base-path artifact problem, not a CSS-design problem. Run `npm run prepare:pages` against a base-path build or inspect the `Place static assets at the Pages artifact root` workflow step. `npm test` includes a base-path build and referenced-asset regression check.
 - **Embedded browser says localhost refused the connection:** run `npm run dev:preview` instead of editing `vite.config.ts`. It sets the preview-only host through `WORKSHOP_PREVIEW_HOST`; stop the long-running process after review.
 - **Windows prints `UV_HANDLE_CLOSING` after an otherwise complete vinext build:** `scripts/test.mjs` retries a failed Windows build once after a short cleanup delay. Do not manually loop through unrelated fixes; if the scripted retry also fails, investigate the persistent build error.
+- **PowerShell blocks `npm.ps1` under the local execution policy:** use `npm.cmd test`, `npm.cmd run lint`, or the corresponding `npm.cmd` command on Windows. Do not change the machine-wide execution policy for this project.
+- **Homepage canonical loses its required trailing slash:** GitHub Pages redirects `/workshop-series` to `/workshop-series/`. Keep the route-level canonical `<link>` in `app/page.tsx`; the metadata `alternates.canonical` serializer used by the current build removes that slash and would point at a redirect. The rendered-HTML and live-site checks enforce the final canonical URL.
 - **A successful deployment still shows an old layout:** first hard-refresh the browser. Then run `npm run check:live` to distinguish browser/CDN cache from missing live assets.
 - **GitHub Pages is not enabled in a new repository:** set Repository Settings > Pages > Source to GitHub Actions once, then rerun the workflow.
 

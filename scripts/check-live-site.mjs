@@ -64,6 +64,30 @@ for (const workshopUrl of workshopUrls) {
   documents.set(workshopUrl, await fetchHtml(workshopUrl));
 }
 
+for (const [documentUrl, html] of documents) {
+  const canonicalMatch = html.match(/<link rel="canonical" href="([^"]+)"/);
+  if (!canonicalMatch) {
+    throw new Error(`${documentUrl} does not declare a canonical URL.`);
+  }
+  if (canonicalMatch[1] !== documentUrl) {
+    throw new Error(
+      `${documentUrl} declares unexpected canonical URL ${canonicalMatch[1]}.`,
+    );
+  }
+  if (!/<meta name="robots" content="index, follow"\/>/.test(html)) {
+    throw new Error(`${documentUrl} does not explicitly allow indexing.`);
+  }
+}
+
+const sitemapUrl = new URL("sitemap.xml", siteUrl);
+const sitemapResponse = await fetchWithRetry(sitemapUrl);
+const sitemap = await sitemapResponse.text();
+for (const documentUrl of documents.keys()) {
+  if (!sitemap.includes(`<loc>${documentUrl}</loc>`)) {
+    throw new Error(`${sitemapUrl} does not include ${documentUrl}.`);
+  }
+}
+
 const assetUrls = new Set();
 for (const html of documents.values()) {
   for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
@@ -95,5 +119,5 @@ for (const assetUrl of assetUrls) {
 }
 
 console.log(
-  `Live site check passed: ${documents.size} HTML pages and ${assetUrls.size} static assets${expectedVersion ? ` for ${expectedVersion.slice(0, 12)}` : ""}.`,
+  `Live site check passed: ${documents.size} HTML pages, sitemap, and ${assetUrls.size} static assets${expectedVersion ? ` for ${expectedVersion.slice(0, 12)}` : ""}.`,
 );
