@@ -40,6 +40,16 @@ jobs:
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
         run: npm run build
 
+      - name: Place static assets at the Pages artifact root
+        shell: bash
+        run: |
+          base_path="${{ steps.pages.outputs.base_path }}"
+          nested_assets="dist/client${base_path}"
+          if [[ -n "$base_path" && -d "$nested_assets" ]]; then
+            cp -R "$nested_assets"/. dist/client/
+          fi
+          test -d dist/client/_next/static
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
