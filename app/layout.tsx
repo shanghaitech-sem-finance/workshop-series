@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: socialImageUrl,
-        width: 1733,
+        width: 1735,
         height: 906,
-        alt: "ShanghaiTech SEM Finance Workshop - October 10, 2026",
+        alt: "ShanghaiTech SEM Finance Workshop - October 11, 2026",
       },
     ],
   },
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ShanghaiTech SEM Finance Workshop",
     description:
-      "Financial Markets in a Changing Information Environment - October 10, 2026.",
+      "Financial Markets in a Changing Information Environment - October 11, 2026.",
     images: [socialImageUrl],
   },
 };

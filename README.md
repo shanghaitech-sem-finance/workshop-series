@@ -6,7 +6,7 @@ Live site: https://shanghaitech-sem-finance.github.io/workshop-series/
 
 ## Current edition
 
-- Date: October 10, 2026
+- Date: October 11, 2026
 - Theme: Financial Markets in a Changing Information Environment
 - Status: Preliminary program coming soon
 - Contact: Yapei Zhang, zhangyp3@shanghaitech.edu.cn

@@ -16,7 +16,7 @@ Read `README.md` for the basic development and content-update workflow.
 Do not change these details unless the organizer supplies replacements:
 
 - Edition: 2026
-- Date: Saturday, October 10, 2026
+- Date: Sunday, October 11, 2026
 - Topic: Financial Markets in a Changing Information Environment
 - Location: Room 501, School of Entrepreneurship and Management, ShanghaiTech University
 - Status: Preliminary program coming soon

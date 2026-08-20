@@ -35,7 +35,7 @@ test("exports the complete bilingual marketing homepage", async () => {
   );
   assert.match(html, /<meta name="robots" content="index, follow"\/>/);
   assert.match(html, /<meta name="googlebot" content="index, follow"\/>/);
-  assert.match(html, /Saturday, October 10, 2026/);
+  assert.match(html, /Sunday, October 11, 2026/);
   assert.match(
     html,
     /<span class="hero-title-main">2026 SEM Finance Workshop:<\/span>/,
@@ -62,7 +62,7 @@ test("exports the complete bilingual marketing homepage", async () => {
   const visibleBody = html.match(/<body>([\s\S]*?)<script/)?.[1] ?? "";
   const normalizedVisibleBody = visibleBody.replace(/<!--.*?-->/g, "");
   for (const item of [
-    "Saturday, October 10, 2026",
+    "Sunday, October 11, 2026",
     "Financial Markets in a Changing Information Environment",
     "Preliminary program coming soon",
   ]) {
