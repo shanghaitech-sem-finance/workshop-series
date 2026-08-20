@@ -1,6 +1,6 @@
 "use client";
 
-import type { ScheduleItem, Workshop } from "../data/workshops";
+import type { LocalizedText, ScheduleItem, Workshop } from "../data/workshops";
 import { workshopYears } from "../data/workshops";
 import { sitePath } from "../lib/site-path";
 import { useLanguage } from "./language";
@@ -47,6 +47,14 @@ const scheduleLabelsZh: Record<string, string> = {
   "Mingle & Discussion": "自由交流与讨论",
 };
 
+function localizedText(value: LocalizedText | undefined, language: "en" | "zh") {
+  if (!value) {
+    return undefined;
+  }
+
+  return typeof value === "string" ? value : value[language];
+}
+
 function ScheduleRow({
   item,
   language,
@@ -55,31 +63,64 @@ function ScheduleRow({
   language: "en" | "zh";
 }) {
   const t = labels[language];
-  const displayLabel = language === "zh" ? scheduleLabelsZh[item.label] ?? item.label : item.label;
+  const label = localizedText(item.label, language) ?? "";
+  const displayLabel =
+    language === "zh" && typeof item.label === "string"
+      ? scheduleLabelsZh[item.label] ?? item.label
+      : label;
+  const speaker = localizedText(item.speaker, language);
+  const institution = localizedText(item.institution, language);
+  const title = localizedText(item.title, language);
+  const abstract = localizedText(item.abstract, language);
+  const discussantLabel = item.discussant
+    ? localizedText(item.discussant.label, language) ?? t.discussant
+    : undefined;
+  const discussantName = item.discussant
+    ? localizedText(item.discussant.name, language)
+    : undefined;
+  const discussantInstitution = item.discussant
+    ? localizedText(item.discussant.institution, language)
+    : undefined;
 
   return (
     <article className={`schedule-row schedule-${item.kind}`}>
       <time>{item.time}</time>
       <div className="schedule-body">
         <span className="schedule-kind">{displayLabel}</span>
-        {item.speaker ? <h3>{item.speaker}</h3> : <h3>{displayLabel}</h3>}
-        {item.institution && <p className="institution">{item.institution}</p>}
-        {item.title && <p className="paper-title">{item.title}</p>}
+        {speaker ? <h3>{speaker}</h3> : <h3>{displayLabel}</h3>}
+        {institution && <p className="institution">{institution}</p>}
+        {title && <p className="paper-title">{title}</p>}
         {item.discussant && (
           <div className="discussant">
-            <span>{t.discussant}</span>
-            <strong>{item.discussant.name}</strong>
-            <small>{item.discussant.institution}</small>
+            <span>{discussantLabel}</span>
+            <strong>{discussantName}</strong>
+            <small>{discussantInstitution}</small>
           </div>
         )}
-        {item.abstract && (
+        {abstract && (
           <details className="abstract">
             <summary>{t.abstract}</summary>
-            <p>{item.abstract}</p>
+            <p>{abstract}</p>
           </details>
         )}
       </div>
     </article>
+  );
+}
+
+export function ProgramSchedule({
+  schedule,
+  language,
+}: {
+  schedule: ScheduleItem[];
+  language: "en" | "zh";
+}) {
+  return (
+    <div className="schedule-list">
+      {schedule.map((item, index) => (
+        <ScheduleRow item={item} language={language} key={`${item.time}-${index}`} />
+      ))}
+    </div>
   );
 }
 
@@ -98,16 +139,16 @@ export function ProgramPage({ workshop }: { workshop: Workshop }) {
                 {workshop.year} {t.edition}
               </span>
             </div>
-            <h1>{workshop.name}</h1>
+            <h1>{localizedText(workshop.name, language)}</h1>
 
             <dl className="program-facts">
               <div>
                 <dt>{t.date}</dt>
-                <dd>{workshop.date}</dd>
+                <dd>{localizedText(workshop.date, language)}</dd>
               </div>
               <div>
                 <dt>{t.location}</dt>
-                <dd>{workshop.location}</dd>
+                <dd>{localizedText(workshop.location, language)}</dd>
               </div>
               <div>
                 <dt>{t.program}</dt>
@@ -125,11 +166,7 @@ export function ProgramPage({ workshop }: { workshop: Workshop }) {
               <p className="section-kicker">{workshop.year}</p>
               <h2>{t.program}</h2>
             </aside>
-            <div className="schedule-list">
-              {workshop.schedule.map((item, index) => (
-                <ScheduleRow item={item} language={language} key={`${item.time}-${index}`} />
-              ))}
-            </div>
+            <ProgramSchedule schedule={workshop.schedule} language={language} />
           </div>
         </section>
 

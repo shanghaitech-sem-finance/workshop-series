@@ -6,29 +6,210 @@ export type ScheduleKind =
   | "meal"
   | "networking";
 
+export type LocalizedText = string | { en: string; zh: string };
+
 export type Discussant = {
-  name: string;
-  institution: string;
+  label?: LocalizedText;
+  name: LocalizedText;
+  institution: LocalizedText;
 };
 
 export type ScheduleItem = {
   time: string;
   kind: ScheduleKind;
-  label: string;
-  speaker?: string;
-  institution?: string;
-  title?: string;
-  abstract?: string;
+  label: LocalizedText;
+  speaker?: LocalizedText;
+  institution?: LocalizedText;
+  title?: LocalizedText;
+  abstract?: LocalizedText;
   discussant?: Discussant;
 };
 
 export type Workshop = {
-  year: "2023" | "2024" | "2025";
-  name: string;
-  date: string;
-  location: string;
+  year: "2023" | "2024" | "2025" | "2026";
+  name: LocalizedText;
+  date: LocalizedText;
+  location: LocalizedText;
   schedule: ScheduleItem[];
   sources: { label: string; href: string }[];
+};
+
+const workshop2026: Workshop = {
+  year: "2026",
+  name: {
+    en: "Finance Workshop: Financial Markets in a Changing Information Environment",
+    zh: "上海科技大学创业与管理学院金融研讨会：信息环境变迁中的金融市场",
+  },
+  date: {
+    en: "Sunday, October 11, 2026",
+    zh: "2026 年 10 月 11 日周日",
+  },
+  location: {
+    en: "Room 501, School of Entrepreneurship and Management, ShanghaiTech University",
+    zh: "上海科技大学创业与管理学院 501 室",
+  },
+  schedule: [
+    {
+      time: "8:30-9:00",
+      kind: "registration",
+      label: { en: "Registration", zh: "签到" },
+    },
+    {
+      time: "9:00-9:15",
+      kind: "remarks",
+      label: { en: "Opening Remarks", zh: "开幕致辞" },
+    },
+    {
+      time: "9:15-10:15",
+      kind: "talk",
+      label: { en: "Featured Talk", zh: "特邀报告" },
+      speaker: { en: "Jun Tu", zh: "凃俊" },
+      institution: {
+        en: "Antai College of Economics and Management, Shanghai Jiao Tong University",
+        zh: "上海交通大学安泰经济与管理学院",
+      },
+      title: {
+        en: "Crowd Wisdom in Social Media: Investor Heterogeneity and Stock Returns",
+        zh: "社交媒体中的群体智慧：投资者异质性与股票收益",
+      },
+    },
+    {
+      time: "10:15-10:40",
+      kind: "break",
+      label: { en: "Group Photo & Coffee Break", zh: "合影+茶歇" },
+    },
+    {
+      time: "10:40-11:30",
+      kind: "talk",
+      label: { en: "Presentation", zh: "报告" },
+      speaker: { en: "Haoxi Yang", zh: "杨昊熙" },
+      institution: {
+        en: "Sun Yat-sen University",
+        zh: "中山大学岭南学院",
+      },
+      title: {
+        en: "Order Imbalance Volatility, Algorithmic Trading, and Inventory Risk",
+        zh: "订单失衡波动、算法交易与库存风险",
+      },
+      discussant: {
+        label: { en: "Discussant", zh: "点评" },
+        name: { en: "Ming Guo", zh: "郭明" },
+        institution: {
+          en: "ShanghaiTech University",
+          zh: "上海科技大学",
+        },
+      },
+    },
+    {
+      time: "11:30-13:30",
+      kind: "meal",
+      label: { en: "Lunch", zh: "午餐" },
+    },
+    {
+      time: "13:30-14:20",
+      kind: "talk",
+      label: { en: "Presentation", zh: "报告" },
+      speaker: { en: "Chang Ma", zh: "马畅" },
+      institution: {
+        en: "Fudan International School of Finance",
+        zh: "复旦大学国际金融学院",
+      },
+      title: {
+        en: "How Does Stock Market Liberalization Spur Growth?",
+        zh: "股票市场开放如何促进经济增长？",
+      },
+      discussant: {
+        label: { en: "Discussant", zh: "点评" },
+        name: { en: "Biao Yang", zh: "杨彪" },
+        institution: {
+          en: "Antai College of Economics and Management, Shanghai Jiao Tong University",
+          zh: "上海交通大学安泰经济与管理学院",
+        },
+      },
+    },
+    {
+      time: "14:20-15:10",
+      kind: "talk",
+      label: { en: "Presentation", zh: "报告" },
+      speaker: { en: "Tianyu Wang", zh: "王天宇" },
+      institution: {
+        en: "Tsinghua University",
+        zh: "清华大学经济管理学院",
+      },
+      title: {
+        en: "Does Artificial Intelligence Reduce Investor Disagreement? Evidence from AI-Human Interactions Data",
+        zh: "人工智能是否降低了投资者分歧？来自人机交互数据的证据",
+      },
+      discussant: {
+        label: { en: "Discussant", zh: "点评" },
+        name: { en: "Yan Luo", zh: "罗妍" },
+        institution: {
+          en: "School of Management, Fudan University",
+          zh: "复旦大学管理学院",
+        },
+      },
+    },
+    {
+      time: "15:10-15:30",
+      kind: "break",
+      label: { en: "Coffee Break", zh: "茶歇" },
+    },
+    {
+      time: "15:30-16:20",
+      kind: "talk",
+      label: { en: "Presentation", zh: "报告" },
+      speaker: { en: "Yurong Hong", zh: "洪玉蓉" },
+      institution: {
+        en: "Shanghai Advanced Institute of Finance",
+        zh: "上海交通大学上海高级金融学院",
+      },
+      title: {
+        en: "Risk Substitution in Bond Funds: Evidence from Duration Adjustments",
+        zh: "债券基金中的风险替代：来自久期调整的证据",
+      },
+      discussant: {
+        label: { en: "Discussant", zh: "点评" },
+        name: { en: "Yushan Tang", zh: "唐雨山" },
+        institution: {
+          en: "Dishui Lake Advanced Finance Institute",
+          zh: "上海财经大学滴水湖高级金融学院",
+        },
+      },
+    },
+    {
+      time: "16:20-17:10",
+      kind: "talk",
+      label: { en: "Presentation", zh: "报告" },
+      speaker: { en: "Jiatao Liu", zh: "刘嘉涛" },
+      institution: {
+        en: "Xi'an Jiaotong-Liverpool University",
+        zh: "西交利物浦大学",
+      },
+      title: {
+        en: "Data Privacy Gone Wrong: The Financial Fallout of App Misconduct",
+        zh: "数据隐私失守：应用程序违规行为的金融后果",
+      },
+      discussant: {
+        label: { en: "Discussant", zh: "点评" },
+        name: { en: "Tong Zhou", zh: "周彤" },
+        institution: {
+          en: "Southern University of Science and Technology",
+          zh: "南方科技大学",
+        },
+      },
+    },
+    {
+      time: "17:10-17:40",
+      kind: "networking",
+      label: { en: "Networking Session", zh: "自由交流" },
+    },
+    {
+      time: "17:40-19:40",
+      kind: "meal",
+      label: { en: "Dinner", zh: "晚餐" },
+    },
+  ],
+  sources: [],
 };
 
 const workshop2025: Workshop = {
@@ -285,6 +466,7 @@ const workshop2023: Workshop = {
 };
 
 export const workshops = {
+  "2026": workshop2026,
   "2025": workshop2025,
   "2024": workshop2024,
   "2023": workshop2023,

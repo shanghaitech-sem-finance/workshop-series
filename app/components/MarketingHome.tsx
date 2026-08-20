@@ -1,8 +1,9 @@
 "use client";
 
-import { workshopYears } from "../data/workshops";
+import { workshops, workshopYears } from "../data/workshops";
 import { sitePath } from "../lib/site-path";
 import { useLanguage } from "./language";
+import { ProgramSchedule } from "./ProgramPage";
 import { SiteHeader } from "./SiteHeader";
 
 const copy = {
@@ -15,8 +16,7 @@ const copy = {
     locationLabel: "Location",
     location:
       "Room 501, School of Entrepreneurship and Management, ShanghaiTech University",
-    programLabel: "Program",
-    program: "Preliminary program coming soon",
+    programSectionTitle: "Preliminary Program",
     previousTitle: "Previous Workshop Programs",
     programLink: "Program",
     contactTitle: "Contact",
@@ -32,8 +32,7 @@ const copy = {
     date: "2026 年 10 月 11 日，星期日",
     locationLabel: "地点",
     location: "上海科技大学创业与管理学院 501 会议室",
-    programLabel: "议程",
-    program: "初步议程即将发布",
+    programSectionTitle: "初步议程",
     previousTitle: "历届研讨会议程",
     programLink: "议程",
     contactTitle: "联系方式",
@@ -71,11 +70,17 @@ export function MarketingHome() {
                 <dt>{t.locationLabel}</dt>
                 <dd>{t.location}</dd>
               </div>
-              <div>
-                <dt>{t.programLabel}</dt>
-                <dd>{t.program}</dd>
-              </div>
             </dl>
+          </div>
+        </section>
+
+        <section className="section home-program-section" id="program">
+          <div className="content-wrap program-layout">
+            <aside>
+              <p className="section-kicker">2026</p>
+              <h2>{t.programSectionTitle}</h2>
+            </aside>
+            <ProgramSchedule schedule={workshops["2026"].schedule} language={language} />
           </div>
         </section>
 

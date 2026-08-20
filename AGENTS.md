@@ -19,7 +19,7 @@ Do not change these details unless the organizer supplies replacements:
 - Date: Sunday, October 11, 2026
 - Topic: Financial Markets in a Changing Information Environment
 - Location: Room 501, School of Entrepreneurship and Management, ShanghaiTech University
-- Status: Preliminary program coming soon
+- Status: Preliminary program published
 - Contact: Yapei Zhang / 张亚佩
 - Temporary contact email: `zhangyp3@shanghaitech.edu.cn`
 
@@ -33,7 +33,8 @@ Replace the temporary contact email when the event-specific address is provided.
 - Do not add an About/Overview section or summaries/annotations for previous workshops.
 - Header wording is `School of Entrepreneurship and Management` and `Finance Workshop Series` (Chinese: `金融系列研讨会`).
 - The homepage current-edition heading separates the main title from the smaller gray topic. Its desktop maximum width is 1200px; narrow screens wrap naturally.
-- The three homepage fact columns are Date, Location, and Program, with equal left padding on desktop.
+- The two homepage fact columns are Date and Location, with equal left padding on desktop; the preliminary program appears directly below them.
+- The 2026 preliminary program appears directly on the homepage using the shared annual-program schedule styling; do not create a separate `/workshops/2026` route unless the organizer requests it.
 - Previous workshop links open consistently formatted HTML pages, not PDFs.
 - Annual pages use Date, Location, and Program; do not add a separate Time field.
 - Do not add transcription disclaimers. Discussant names use the same font size as presenter names.
@@ -64,9 +65,9 @@ Search for `zhangyp3@shanghaitech.edu.cn`, update both language entries in `Mark
 ### Publish the 2026 program
 
 1. Transcribe only organizer-confirmed information into the `Workshop` structure in `app/data/workshops.ts`.
-2. Add `app/workshops/2026/page.tsx` using an existing annual route as the model.
-3. Turn the homepage Program status into a link to `/workshops/2026` while preserving both languages.
-4. Keep 2026 out of the Previous Workshop Programs list until it is a past edition unless the organizer requests otherwise.
+2. Render the schedule directly on the homepage with the shared annual-program schedule component while preserving both languages.
+3. Keep 2026 out of the Previous Workshop Programs list until it is a past edition unless the organizer requests otherwise.
+4. Do not add a separate 2026 route or sitemap entry unless the organizer requests one.
 
 ### Add a future edition
 

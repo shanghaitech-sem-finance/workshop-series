@@ -49,7 +49,11 @@ test("exports the complete bilingual marketing homepage", async () => {
     /Room 501, School of Entrepreneurship and Management, ShanghaiTech University/,
   );
   assert.match(html, /Financial Markets in a Changing Information Environment/);
-  assert.match(html, /Preliminary program coming soon/);
+  assert.match(html, /Preliminary Program/);
+  assert.match(html, /class="schedule-list"/);
+  assert.match(html, /Jun Tu/);
+  assert.match(html, /Crowd Wisdom in Social Media: Investor Heterogeneity and Stock Returns/);
+  assert.match(html, /Data Privacy Gone Wrong: The Financial Fallout of App Misconduct/);
   assert.match(html, /zhangyp3@shanghaitech\.edu\.cn/);
   assert.match(html, /中文/);
   assert.match(
@@ -64,7 +68,7 @@ test("exports the complete bilingual marketing homepage", async () => {
   for (const item of [
     "Sunday, October 11, 2026",
     "Financial Markets in a Changing Information Environment",
-    "Preliminary program coming soon",
+    "Preliminary Program",
   ]) {
     assert.equal(visibleBody.split(item).length - 1, 1, `${item} should appear once`);
   }
@@ -124,6 +128,13 @@ test("exports each historical workshop as a standalone HTML page", async () => {
 
   const html2023 = await readOutput("workshops/2023.html");
   assert.doesNotMatch(html2023, /Workshop participants|Venue note/);
+
+  const workshopData = await readFile(
+    new URL("../app/data/workshops.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(workshopData, /社交媒体中的群体智慧：投资者异质性与股票收益/);
+  assert.match(workshopData, /数据隐私失守：应用程序违规行为的金融后果/);
 });
 
 test("includes GitHub Pages deployment assets", async () => {
@@ -146,7 +157,12 @@ test("includes GitHub Pages deployment assets", async () => {
     /^\/6\. ShanghaiTech_SEM_Finance_Workshop_Programs\.pdf$/m,
   );
 
-  for (const path of ["/", "/workshops/2023", "/workshops/2024", "/workshops/2025"]) {
+  for (const path of [
+    "/",
+    "/workshops/2023",
+    "/workshops/2024",
+    "/workshops/2025",
+  ]) {
     assert.match(sitemap, new RegExp(`<loc>${productionUrl(path)}</loc>`));
   }
   assert.doesNotMatch(sitemap, /localhost/);
@@ -165,6 +181,10 @@ test("preserves approved typography and homepage spacing", async () => {
   const factsStart = css.indexOf(".home-page .event-facts {");
   const mobileStart = css.indexOf("@media (max-width: 900px)", factsStart);
   const desktopFacts = css.slice(factsStart, mobileStart);
+  assert.match(
+    desktopFacts,
+    /grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/,
+  );
   assert.match(
     desktopFacts,
     /\.home-page \.event-facts div\s*\{[^}]*padding:\s*22px 26px/s,

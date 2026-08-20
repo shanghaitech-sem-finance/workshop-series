@@ -8,7 +8,7 @@ Live site: https://shanghaitech-sem-finance.github.io/workshop-series/
 
 - Date: October 11, 2026
 - Theme: Financial Markets in a Changing Information Environment
-- Status: Preliminary program coming soon
+- Status: Preliminary program published
 - Contact: Yapei Zhang, zhangyp3@shanghaitech.edu.cn
 
 ## Local development
@@ -43,8 +43,8 @@ Search for `zhangyp3@shanghaitech.edu.cn` in `app/components/MarketingHome.tsx` 
 ## Adding the 2026 program
 
 1. Add the 2026 schedule to `app/data/workshops.ts` following the existing `Workshop` shape.
-2. Create `app/workshops/2026/page.tsx` using one of the existing annual pages as a model.
-3. Replace the homepage `Preliminary program coming soon` message with a link to `/workshops/2026`.
+2. Render the schedule directly on the homepage using the shared annual-program schedule component.
+3. Keep 2026 out of the previous-program list and do not add a separate 2026 route unless requested.
 4. Run `npm run build` before publishing.
 
 ## GitHub Pages

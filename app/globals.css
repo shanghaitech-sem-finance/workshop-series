@@ -1426,6 +1426,7 @@ summary:focus-visible {
 
 .home-page .event-facts {
   max-width: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-top: 54px;
   border-color: #d9ddda;
   background: #fff;
@@ -1585,6 +1586,10 @@ summary:focus-visible {
 }
 
 @media (max-width: 900px) {
+  .home-page .event-facts {
+    grid-template-columns: 1fr;
+  }
+
   .home-page .event-facts div:first-child {
     padding-left: 0;
   }
