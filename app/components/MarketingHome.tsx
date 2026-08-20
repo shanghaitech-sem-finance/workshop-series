@@ -11,7 +11,7 @@ const copy = {
     title: "2026 SEM Finance Workshop:",
     theme: "Financial Markets in a Changing Information Environment",
     dateLabel: "Date",
-    date: "Saturday, October 10, 2026",
+    date: "Sunday, October 11, 2026",
     locationLabel: "Location",
     location:
       "Room 501, School of Entrepreneurship and Management, ShanghaiTech University",
@@ -29,7 +29,7 @@ const copy = {
     title: "2026 SEM 金融研讨会：",
     theme: "Financial Markets in a Changing Information Environment",
     dateLabel: "日期",
-    date: "2026 年 10 月 10 日，星期六",
+    date: "2026 年 10 月 11 日，星期日",
     locationLabel: "地点",
     location: "上海科技大学创业与管理学院 501 会议室",
     programLabel: "议程",
